@@ -7,6 +7,12 @@ document.querySelectorAll('#experiment-overlay div.metadata-container').forEach(
 });
 ```
 
+### Toggle visibility of YouTube end screens
+```javascript
+document.querySelectorAll("#movie_player > div.ytp-ce-element[tabindex='0']").forEach(e => {
+  e.style.visibility = (e.style.visibility === 'hidden') ? 'visible' : 'hidden';
+});
+```
 
 ## Useful Links
 
