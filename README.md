@@ -7,22 +7,24 @@ I've stored some bookmarklets / userscripts that I've created, but they're custo
 ### Replace with Latest Snapshot in iframe
 
 ```javascript
-async function fetchSnapshotURL() {
-  const encodedURL = encodeURIComponent(window.location.href);
+function getSnapshotURL(originalURL) {
+  const encodedURL = encodeURIComponent(originalURL);
   const nextYear = new Date().getFullYear() + 1;
   return `https://web.archive.org/web/${nextYear}/${encodedURL}`;
 }
 
-async function replaceWithSnapshot() {
-  const snapshotURL = await fetchSnapshotURL();
-
-  if (!snapshotURL) {
-    alert("Snapshot URL not found");
-    return;
+function getURL() {
+  // Handle error like `ERR_TUNNEL_CONNECTION_FAILED`, e.g. `chrome-error://chromewebdata/`
+  if (window.location.href === "chrome-error://") {
+    return document.querySelector("strong[jscontent='failedUrl']")?.textContent;
   }
 
+  return window.location.href;
+}
+
+function replaceWithSnapshot() {
   const snapshotIframe = document.createElement("iframe");
-  snapshotIframe.src = snapshotURL;
+  snapshotIframe.src = getSnapshotURL(getURL());
   Object.assign(snapshotIframe.style, {
     width: "100%",
     height: "100%",
